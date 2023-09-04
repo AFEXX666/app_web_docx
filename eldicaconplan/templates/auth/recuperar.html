@@ -1,0 +1,43 @@
+{% extends './base.html' %} {% block title %}Restablecer Contraseña{% endblock %} {% block
+    customCSS %}
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/login.css') }}"
+    />
+    {% endblock %} {% block body %}
+    <header>
+      <div class="linea-verde"></div>
+      <div class="contenedor-imagen">
+        <img src="../static/img/logouttn.png" alt="Imagen" />
+      </div>
+    </header>
+    <form class="form-signin" action="/recuperar" method="POST">
+      <i class="fa-solid fa-user"></i>
+      {% with messages = get_flashed_messages() %} {% if messages %}
+      <br />
+      {% for message in messages %}
+      <div class="alert alert-danger alert-dismissible" role="alert" style="padding: 0 !important;">
+          <p style="margin: 0 !important;">{{ message }}</p>
+      </div>
+      {% endfor %} {% endif %} {% endwith %}
+      <h1 class="h3-smaller">BIENVENIDO, PARA RESTABLECER TU CONTRASEÑA INGRESA TU CORREO</h1>
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+      <div class="form-floating mt-2">
+        <input
+          type="text"
+          class="form-control"
+          id="username"
+          name="txtemail"
+          placeholder="Username"
+          required
+        />
+        <label for="username">Correo</label>
+      </div>
+      <button class="recuperar" type="submit">Enviar</button>
+      <p class="return-login"><a href="{{ url_for('login') }}">Iniciar sesion</a></p>
+    </form>
+    <footer>
+      <p>© <span id="year"></span> Universidad Tecnologica de Tamaulipas Norte.</p>
+    </footer>
+    {% endblock %}
+    

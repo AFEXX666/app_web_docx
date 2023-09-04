@@ -1,0 +1,168 @@
+{% extends './base.html' %} {% block title %}Home{% endblock %} {% block
+    customCSS %}
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/home.css') }}"
+    />
+    {% endblock %} {% block body %}
+    <header>
+      <div class="linea-verde"></div>
+      <div class="contenedor-imagen">
+        <img src="../static/img/logouttn.png" alt="Imagen" />
+      </div>
+      <ul class="navbar-nav ml-auto ml-md-0" style="position: absolute; right: .5cm;">
+        <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" id="userDropdown" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="color: #fff;"><i class="fas fa-user fa-fw"></i></a>
+            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
+                <a class="dropdown-item" href="#"></a><a class="dropdown-item" href="#">{{ current_user.fullname }}</a>
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item" href="#"></a><a class="dropdown-item" href="#">{{ current_user.user_type }}</a>
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item" href="{{ url_for('inicio') }}"><b>Volver al inicio</b></a>
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item" href="{{ url_for('logout') }}">Log Out</a>
+            </div>
+        </li>
+    </ul>
+    </header>
+    {% if current_user.user_type == 'Maestro' %}
+    <main class="mycards">
+      {% if assig %}
+      <div class="cards">
+        <div class="face front">
+          <img src="../static/img/tecinfo.png" alt="" />
+          <div class="info">
+            <h2>TSU</h2>
+            <p>Planeaciones Digitales</p>
+          </div>
+        </div>
+        <div class="face back">
+          {% for assigment in assig %}
+          <a href="{{ url_for('roll', area=assigment[1], otro_dato='TSU', rol='Maestro', ass='plan') }}" class="entornos" id="adminTagone">
+            <h2>{{ assigment[0] }}</h2>
+          </a>   
+          {% endfor %}
+        </div>
+      </div>
+      {% endif %}
+      
+       {% if materia %}
+      <div class="cards">
+        <div class="face front">
+          <img src="../static/img/ingeinfor.png" alt="" />
+          <div class="info">
+            <h2>Ingenieria</h2>
+            <p>Planeaciones Digitales</p>
+          </div>
+        </div>
+        <div class="face back">
+          {% for mate in materia %}
+          <a href="{{ url_for('roll', area=mate[1], otro_dato='Ingenieria', rol='Maestro', ass='plan') }}" class="entornos" id="adminTagone">
+            <h2>{{ mate[0] }}</h2>
+          </a> 
+          {% endfor %}
+        </div>
+      </div>
+      {% endif %}
+    </main>
+    {% else %}
+    {% if grados[0] == 'Licenciatura' %}
+    <main class="mycards">
+      <div class="cards">
+        <div class="face front">
+          <img src="../static/img/tecinfo.png" alt="" />
+          <div class="info">
+            <h2>TSU</h2>
+          </div>
+        </div>
+        <div class="face back">
+          {% for areas in carreras %}
+          <a href="{{ url_for('roll', otro_dato='TSU', rol="Administrador") }}" class="entornos" id="adminTagone" style="height: 100% !important;">
+            <h2>{{ areas }}</h2>
+          </a>   
+         {% endfor %}
+       </div>
+      </div>
+      <div class="cards">
+        <div class="face front">
+          <img src="../static/img/ingeinfor.png" alt="" />
+          <div class="info">
+            <h2>Licenciatura</h2>
+          </div>
+        </div>
+        <div class="face back">
+          {% for areas in carreras %}
+          <a href="{{ url_for('roll', otro_dato='Licenciatura', rol="Administrador") }}" class="entornos" id="adminTagone" style="height: 100% !important;">
+            <h2>{{ areas }}</h2>
+          </a>   
+          {% endfor %}
+        </div>
+      </div>
+    </main>
+    {% else %}
+    <main class="mycards">
+      <div class="cards">
+        <div class="face front">
+          <img src="../static/img/tecinfo.png" alt="" />
+          <div class="info">
+            <h2>TSU</h2>
+          </div>
+        </div>
+        <div class="face back">
+          {% for areas in area %}
+          <a href="{{ url_for('roll', area=areas[2], otro_dato='TSU', rol="Administrador", ass="plan") }}" class="entornos" id="adminTagone">
+            <h2>{{ areas[1] }}</h2>
+          </a>   
+         {% endfor %}
+       </div>
+      </div>
+      <div class="cards">
+        <div class="face front">
+          <img src="../static/img/ingeinfor.png" alt="" />
+          <div class="info">
+            <h2>Ingenieria</h2>
+          </div>
+        </div>
+        <div class="face back">
+          {% for areas in area %}
+          <a href="{{ url_for('roll', area=areas[2], otro_dato='Ingenieria', rol="Administrador", ass="plan") }}" class="entornos" id="adminTagone">
+            <h2>{{ areas[1] }}</h2>
+          </a>    
+          {% endfor %}
+        </div>
+      </div>
+    </main>
+    {% endif %}
+    {% endif %}
+    <footer>
+      <p>© <span id="year"></span> Universidad Tecnologica de Tamaulipas Norte.</p>
+    </footer>
+    <!--PARTE DEL ADIMN-->
+    <script>
+      var tsu = document.querySelector("#targetOne");
+      var ing = document.querySelector("#targetThree");
+    
+      tsu.addEventListener("click", () => {
+        window.location = "home_user";
+      });
+      ing.addEventListener("click", () => {
+        window.location = "home_user";
+      });
+    </script>
+    <!--PARTE DEL MAESTRO-->
+    <script>
+      var tsu = document.querySelector("#adminTagone");
+      var ing = document.querySelector("#adminTagonethree");
+    
+      tsu.addEventListener("click", () => {
+        window.location = "home_admin";
+      });
+      ing.addEventListener("click", () => {
+        window.location = "home_admin";
+      });
+    </script>
+    
+    
+    
+    {% endblock %}
+    

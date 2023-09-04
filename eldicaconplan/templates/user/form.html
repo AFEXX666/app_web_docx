@@ -1,0 +1,393 @@
+{% extends './base.html' %} {% block title %}Planeacion{% endblock %} {% block
+  customCSS %}
+  <link
+    rel="stylesheet"
+    href="{{ url_for('static', filename='css/user.css') }}"
+  />
+  {% endblock %} {% block body %}
+  <nav class="sb-topnav navbar navbar-expand navbar-dark">
+    <a class="navbar-brand" href="index.html"><h1 class="logotipo">UTTN</h1></a>
+
+
+    <ul
+      class="navbar-nav ml-auto ml-md-0"
+      style="position: absolute; right: 0.5cm"
+    >
+      <li class="nav-item dropdown">
+        <a
+          class="nav-link dropdown-toggle"
+          id="userDropdown"
+          href="#"
+          role="button"
+          data-toggle="dropdown"
+          aria-haspopup="true"
+          aria-expanded="false"
+          ><i class="fas fa-user fa-fw"></i
+        ></a>
+        <div
+          class="dropdown-menu dropdown-menu-right"
+          aria-labelledby="userDropdown"
+        >
+          <a class="dropdown-item" href="#"><b>{{current_user.fullname}}</b></a
+          ><a class="dropdown-item" href="#"><b>{{current_user.user_type}}</b></a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="{{ url_for('logout') }}">Logout</a>
+        </div>
+      </li>
+    </ul>
+  </nav>
+  <div id="layoutSidenave">
+    <form id="miFormulario" action="/planeacion" method="post" enctype="multipart/form-data">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+    {% for plantillas in plantilla %}
+    <input type="hidden" name="name" value="{{ plantillas[1] }}">
+    {% endfor %}
+    <main class="formu formu-1 visible">
+      <div style="text-align: center;">
+        <h2 style="color: #1ab192; font-size: 2rem !important;">Fechas de Planeaciones</h2>
+      </div>
+      <div>
+        {% for tema in resulta %}
+        <p class="tems" style="color: #1ab192 !important;margin-top: 40px;">Unidad Tematica: {{ tema[0] }}</p>
+        {% for sub in tema[2] %}
+          <div class="formes">
+            <p class="tems">{{ sub }}</p>
+            <div style="display: flex;">
+              <input type="date" class="fecha-inicio" required="">
+              <p class="tems">A</p>
+              <input type="date" class="fecha-fin" required="">
+              <input type="text" class="numero-semana" placeholder="No. de semana" required="">
+            </div>
+          </div>
+          {% endfor %}
+        {% endfor %}
+      <div class="next">
+        <button class="siguiente-btn" type="button" style="background-color: #1ab192;" onclick="mostrarSiguiente()">Siguiente</button>
+      </div>
+    </main>
+    
+    <main class="formu formu-2 hidden">
+      <div style="text-align: center;">
+        <h2 style="color: #1ab192; font-size: 2rem !important;">Portafolio de evidencias de aprendizaje, ligado a la capacidad de la materia</h2>
+      </div>
+      <div>
+          <div class="formes">
+            <p style="color: black;">{{ tema }}</p>
+            <div id="inputs-container">
+              <div>
+                <input type="text" class="actividad" placeholder="Actividad" required="">
+                <input type="text" class="porcentaje" placeholder="Porcentaje" required="">
+              </div>
+              <div>
+                <input type="text" class="actividad" placeholder="Actividad" required="">
+                <input type="text" class="porcentaje" placeholder="Porcentaje" required="">
+              </div>
+              <div>
+                <input type="text" class="actividad" placeholder="Actividad" required="">
+                <input type="text" class="porcentaje" placeholder="Porcentaje" required="">
+              </div>
+              <div>
+                <input type="text" class="actividad" placeholder="Actividad" required="">
+                <input type="text" class="porcentaje" placeholder="Porcentaje" required="">
+              </div>
+            </div>
+            <button id="agregar-inputs" class="button" type="button">Agregar Actividad</button>
+          </div>
+      <div class="next">
+        <button class="atras-btn" onclick="mostrarAnterior()" type="button">Atrás</button>
+        <button type="button" class="botonRedireccionar">cancelar</button>
+        <button onclick="mostrarSiguiente()" type="button">Siguiente</button>
+      </div>
+    </main>
+    
+    <main class="formu formu-3 hidden">
+      <div style="text-align: center;">
+        <h2 style="color: #1ab192; font-size: 2rem !important;">Observaciones</h2>
+      </div>
+      <div>
+          <div class="formes" >
+            <p style="color: black;">{{ tema }}</p>
+            <div>
+              <textarea  name="observacion" placeholder="Si tiene alguna observación o sugerencia relacionada con la materia, escríbela aquí en caso de no tener observaciones, plasmarlo por escrito..." required=""></textarea>
+            </div>
+          </div>
+      <div class="next">
+        <button class="atras-btn" onclick="mostrarAnterior()" type="button">Atrás</button>
+        <button type="button" class="botonRedireccionar">cancelar</button>
+        <button onclick="mostrarSiguiente()" type="button">Siguiente</button>
+      </div>
+    </main>
+    
+    <main class="formu formu-4 hidden">
+      <div style="text-align: center;">
+        <h2 style="color: #1ab192; font-size: 2rem !important;">Habilidades del docente</h2>
+      </div>
+      <div>
+          <div class="formes" >
+            <p style="color: black;">{{ tema }}</p>
+            <div class="form-group" style="text-align: start !important;">
+              <label for="exampleInputUsername1" class="tems">Conociminetos generales del profesor</label>
+              <textarea
+                type="text"
+                class="form-control textarea"
+                name="conocimientos"
+                placeholder="Conociminetos"
+                required=""
+              ></textarea>
+            </div>
+            <h2 style="color: #1ab192; font-size: 2rem !important;    margin: 40px 0 40px 0;">Conceptos de los subtemas</h2>
+            {% for tema in temas %}
+            
+            <div class="form-group" style="text-align: start !important;">
+              <label for="exampleInputUsername1" class="tems">{{ tema }}</label>
+              <input
+                type="text"
+                class="conceptos_t form-control"
+                name="conceptos_t"
+                placeholder="Conceptos"
+              />
+            </div>
+            {% endfor %}
+            <h2 style="color: #1ab192; font-size: 2rem !important;margin: 40px 0 40px 0;" >Temas de los subtemas</h2>
+            {% for tema in result %}
+            <div class="form-group" style="text-align: start !important;">
+              <label for=""  class="tems">Los subtemas son: </label>
+              {% for concepto in tema[1] %}
+                <label for="exampleInputUsername1" class="tems">{{ concepto }}</label>
+              {% endfor %} 
+                <input
+                    type="text"
+                    class="temas form-control"
+                    name="tema"
+                    placeholder="Tema"
+                />
+                
+            </div>
+            {% endfor %}
+          </div>
+      <div class="next">
+        <button class="atras-btn" onclick="mostrarAnterior()" type="button">Atrás</button>
+        <button type="button" class="botonRedireccionar">cancelar</button>
+        <button onclick="mostrarSiguiente()" type="button">Siguiente</button>
+      </div>
+    </main>
+
+    <main class="formu formu-5 hidden">
+      <div style="text-align: center;">
+        <h2 style="color: #1ab192; font-size: 2rem !important;">Firma del docente</h2>
+      </div>
+      <div>
+        <div class="formes">
+          <p style="color: black;">{{ tema }}</p>
+          <div>
+            <canvas name="firmas" id="canvas" width="500" height="300"></canvas>
+            
+            <input type="hidden" id="firma" value="" required="">
+          </div>
+          <div>
+          <button onclick="limpiarCanvas()" type="button"><i class="fa-solid fa-trash"></i></button>
+        </div>
+        </div>
+      <div class="next" style="margin-top: 74px;">
+        <button class="atras-btn" onclick="mostrarAnterior()" type="button">Atrás</button>
+        <button type="button" class="botonRedireccionar">cancelar</button>
+        <button onclick="enviarFormulario()" type="button">Enviar</button>
+      </div>
+    </main>
+    <input type="hidden" name="firma" id="firmas" value="">
+  </form>
+      <footer class="Myfooter" style="width: 100% !important;">
+        <p>© <span id="year"></span> Universidad Tecnologica de Tamaulipas Norte.</p>
+      </footer>
+    </div>
+  </div>
+  <script>
+    function enviarFormulario() {
+      var formularioData = {};
+      
+      var canvas = document.getElementById('canvas');
+      var firmaBase64 = canvas.toDataURL(); // La firma se almacena como una imagen en formato base64
+
+    // Agregar la firma en base64 al objeto formularioData
+      formularioData['firmas'] = firmaBase64;
+
+      // Obtener todos los campos con la clase 'fecha-inicio' y agregar sus valores al objeto
+      $('.fecha-inicio').each(function(index) {
+        formularioData['fecha_inicio_' + (index + 1)] = $(this).val();
+      });
+    
+      // Obtener todos los campos con la clase 'fecha-fin' y agregar sus valores al objeto
+      $('.fecha-fin').each(function(index) {
+        formularioData['fecha_fin_' + (index + 1)] = $(this).val();
+      });
+    
+      // Obtener todos los campos con la clase 'numero-semana' y agregar sus valores al objeto
+      $('.numero-semana').each(function(index) {
+        formularioData['numero_semana_' + (index + 1)] = $(this).val();
+      });
+
+      $('.actividad').each(function(index) {
+        formularioData['actividad_' + (index + 1)] = $(this).val();
+      });
+
+      $('.porcentaje').each(function(index) {
+        formularioData['porcentaje_' + (index + 1)] = $(this).val();
+      });
+
+      $('.conceptos_t').each(function(index) {
+        formularioData['conceptos_t_' + (index + 1)] = $(this).val();
+      });
+
+      $('.temas').each(function(index) {
+        formularioData['temas_' + (index + 1)] = $(this).val();
+      });
+    
+      // ... Repite este proceso para otros campos si los tienes ...
+      formularioData['observacion'] = $('textarea[name="observacion"').val();
+
+      formularioData['conocimientos'] = $('textarea[name="conocimientos"').val();
+      
+      // Agregar el token CSRF al objeto
+      formularioData['csrf_token'] = $('input[name="csrf_token"]').val();
+
+      formularioData['name'] = $('input[name="name"]').val();
+      console.log(formularioData);
+      var loadingAlert = Swal.fire({
+      title: 'Cargando...',
+      html: 'Esto podria tardar menos de 5 min. Por favor, espere...',
+      allowOutsideClick: false,
+      didOpen: () => {
+        Swal.showLoading();
+      }
+      });
+      // Enviar el formulario al servidor usando Ajax
+      $.ajax({
+        type: 'POST',
+        url: '/planeacion',
+        data: formularioData,
+        success: function(response) {
+          // Manejar la respuesta del servidor si es necesario
+          console.log('Formulario enviado con éxito:', response);
+          loadingAlert.close();
+        // Redirigir a una nueva ubicación después de enviar con éxito
+        window.location.href = '/planeacionesU'; 
+        },
+        error: function(error) {
+          // Manejar el error si ocurre algún problema al enviar el formulario
+          console.error('Error al enviar el formulario:', error);
+          console.log(formularioData);
+        }
+      });
+    }
+    
+    // Asociar la función enviarFormulario al evento submit del formulario
+    $('#miFormulario').submit(function(event) {
+      event.preventDefault();
+      enviarFormulario();
+    });
+    </script>
+    
+
+<script>
+ const formularios = document.querySelectorAll(".formu");
+
+function mostrarSiguiente() {
+  const formularioVisible = document.querySelector(".visible");
+  const formularioSiguiente = formularioVisible.nextElementSibling;
+
+  if (formularioSiguiente) {
+    formularioVisible.classList.remove("visible");
+    formularioVisible.classList.add("hidden");
+    formularioSiguiente.classList.remove("hidden");
+    formularioSiguiente.classList.add("visible");
+  }
+}
+
+function mostrarAnterior() {
+  const formularioVisible = document.querySelector(".visible");
+  const formularioAnterior = formularioVisible.previousElementSibling;
+
+  if (formularioAnterior) {
+    formularioVisible.classList.remove("visible");
+    formularioVisible.classList.add("hidden");
+    formularioAnterior.classList.remove("hidden");
+    formularioAnterior.classList.add("visible");
+  }
+}
+
+</script>
+<script>
+  const canvas = document.getElementById('canvas');
+  const ctx = canvas.getContext('2d');
+  let isDrawing = false;
+  let signatureData = '';
+
+  canvas.addEventListener('mousedown', startDrawing);
+  canvas.addEventListener('mousemove', draw);
+  canvas.addEventListener('mouseup', endDrawing);
+  canvas.addEventListener('mouseleave', endDrawing);
+
+  function startDrawing(e) {
+    isDrawing = true;
+    const { offsetX, offsetY } = e;
+    ctx.beginPath();
+    ctx.moveTo(offsetX, offsetY);
+  }
+
+  function draw(e) {
+    if (!isDrawing) return;
+    const { offsetX, offsetY } = e;
+    ctx.lineTo(offsetX, offsetY);
+    ctx.stroke();
+  }
+
+  function endDrawing() {
+    isDrawing = false;
+    signatureData = canvas.toDataURL(); 
+    document.getElementById('firma').value = signatureData;
+  }
+
+  function limpiarCanvas() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    document.getElementById('firma').value = '';
+  }
+
+</script>
+
+<script>
+  const addButton = document.getElementById("agregar-inputs");
+  const inputsContainer = document.getElementById("inputs-container");
+
+  addButton.addEventListener("click", () => {
+      const newInputsDiv = document.createElement("div");
+      newInputsDiv.innerHTML = `
+          <input type="text" class="actividad" placeholder="Actividad" required="">
+          <input type="text" class="porcentaje" placeholder="Porcentaje" required="">
+          <button class="eliminar-input" style="color:#fff">Eliminar</button>
+      `;
+      inputsContainer.appendChild(newInputsDiv);
+  });
+
+  inputsContainer.addEventListener("click", (event) => {
+      if (event.target.classList.contains("eliminar-input")) {
+          event.target.parentNode.remove();
+      }
+  });
+</script>
+<script>
+  // Función de redireccionamiento
+  function redireccionar() {
+      window.location.href = "planeacionesU"; 
+  }
+
+  // Obtener todos los botones con la clase "botonRedireccionar"
+  var botones = document.querySelectorAll(".botonRedireccionar");
+
+  // Agregar un evento a cada botón
+  botones.forEach(function(boton) {
+      boton.addEventListener("click", redireccionar);
+  });
+</script>
+
+  {% endblock %}
+  

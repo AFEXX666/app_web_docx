@@ -1,0 +1,259 @@
+{% extends './base.html' %} {% block title %}Home{% endblock %} {% block
+customCSS %}
+<link
+  rel="stylesheet"
+  href="{{ url_for('static', filename='css/sadmin.css') }}"
+/>
+{% endblock %} {% block body %}
+<div class="popup-container" id="formato">
+  <div class="popup-content">
+    <form action="/filtro_admin" method="post" id="tuFormularioFiAD" class="formA">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+      <i class="fa-solid fa-x" id="close" style="color: #1ab192"></i>
+      <div class="form-group">
+        <label for="exampleInputUsername1">Filtrar</label>
+        <select class="form-control" name="txtname" required="">
+          <option id="newgrupo" disabled selected>Seleccionar</option>
+          <option id="newgrupo" value="carrera">Carreras</option>
+          <option id="newgrupo" value="areas">Areas</option>
+          <option id="newgrupo" value="grado">Grado</option>
+          <option id="newgrupo" value="edificio">Edificios</option>
+          <option id="newgrupo" value="users">Administradores</option>
+        </select>
+      </div>
+      <button class="w-100 btn-lg btn-color" id="submitBtn" type="submit">Filtrar</button>
+    </form>
+  </div>
+</div>
+
+<nav class="sb-topnav navbar navbar-expand navbar-dark">
+  <a class="navbar-brand" href="{{ url_for('home_admin') }}"><h1 class="logotipo">UTTN</h1></a>
+  <button
+    class="btn btn-link btn-sm order-1 order-lg-0"
+    id="sidebarToggle"
+    href="#"
+  >
+    <i class="fas fa-bars"></i>
+  </button>
+  <!-- Navbar Search-->
+  <!--<form class="d-none d-md-inline-block form-inline ml-auto mr-0 mr-md-3 my-2 my-md-0">
+      <div class="input-group">
+          <input class="form-control" type="text" placeholder="Search for..." aria-label="Search" aria-describedby="basic-addon2" />
+          <div class="input-group-append">
+              <button class="btn btn-primary" type="button"><i class="fas fa-search"></i></button>
+          </div>
+      </div>
+  </form>-->
+  <!-- Navbar-->
+  <ul
+    class="navbar-nav ml-auto ml-md-0"
+    style="position: absolute; right: 0.5cm"
+  >
+    <li class="nav-item dropdown">
+      <a
+        class="nav-link dropdown-toggle"
+        id="userDropdown"
+        href="#"
+        role="button"
+        data-toggle="dropdown"
+        aria-haspopup="true"
+        aria-expanded="false"
+        ><i class="fas fa-user fa-fw"></i
+      ></a>
+      <div
+        class="dropdown-menu dropdown-menu-right"
+        aria-labelledby="userDropdown"
+      >
+        <a class="dropdown-item" href="#"><b>{{current_user.fullname}}</b></a
+        ><a class="dropdown-item" href="#"><b>{{current_user.user_type}}</b></a>
+        <div class="dropdown-divider"></div>
+        <a class="dropdown-item" href="{{ url_for('logout') }}">Logout</a>
+      </div>
+    </li>
+  </ul>
+</nav>
+<div id="layoutSidenav">
+  <div id="layoutSidenav_nav">
+    <nav class="sb-sidenav accordion" id="sidenavAccordion">
+      <div class="sb-sidenav-menu">
+        <div class="nav">
+          <a class="nav-link" href="{{ url_for('home_sadmin') }}">
+            <div class="sb-nav-link-icon">
+              <i class="fa-solid fa-house"></i>
+            </div>
+            Inicio
+          </a>
+          <a class="nav-link" href="{{ url_for('admins') }}">
+            <div class="sb-nav-link-icon">
+              <i class="fa-regular fa-user"></i>
+            </div>
+            Administradores
+          </a>
+          <a class="nav-link" href="{{ url_for('carreras') }}">
+            <div class="sb-nav-link-icon">
+              <i class="fa-solid fa-user-tie"></i>
+            </div>
+            Carreras
+          </a>
+          <a class="nav-link" href="{{ url_for('especialidades') }}">
+            <div class="sb-nav-link-icon">
+              <i class="fa-solid fa-book-open-reader"></i>
+            </div>
+            Especialidades
+          </a>
+          <a class="nav-link" href="{{ url_for('edificios') }}">
+            <div class="sb-nav-link-icon">
+              <i class="fa-solid fa-building"></i>
+            </div>
+            Edificios
+          </a>
+          <a class="nav-link" href="{{ url_for('grado') }}">
+            <div class="sb-nav-link-icon">
+              <i class="fa-sharp fa-solid fa-user-graduate"></i>
+            </div>
+            Grado
+          </a>
+        </div>
+      </div>
+    </nav>
+  </div>
+  <div id="layoutSidenav_content">
+    <div class="filter-sh">
+      <div class="icons" id="iconos">
+        <i class="fa-solid fa-arrow-down-wide-short" id="create"></i>
+      </div>
+      <div>
+        <div class="search-container">
+          <input type="text" id="searchInput" placeholder="Buscar" oninput="searchMain()">
+          <button type="submit"><i class="fa fa-search"></i></button>
+        </div>        
+      </div>
+    </div>
+    <main class="mainContent" id="areas-container">
+
+      {% for edificios in edificio %}
+      <div class="cards">
+        <div class="face front">
+          <div style="text-align: center;">
+            <img class="image" src="https://cdn-icons-png.flaticon.com/512/916/916771.png" alt="" />
+          </div>
+          
+          <div class="info">
+            <h2 class="h2">Edificio {{ edificios[1] }}</h2>
+          </div>
+        </div>
+        <div class="face back">
+          <div style="text-align: center;"><h2 style="color: #1ab192;">Informacion</h2></div>
+          <div class="entornos" id="targetOne">
+            {% for scarrera in carrera %}
+              {% if scarrera[2] == edificios[0] %}
+                <p><i class="fa-solid fa-user-tie"></i> {{ scarrera[1] }}</p>
+              {% endif %}
+            {% endfor %}
+          </div>
+          <div class="desarrollo" id="targetThree">
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+
+      {% for area in special %}
+      <div class="cards">
+        <div class="face front">
+          <img src="{{ area[3] }}" alt="" />
+          <div class="info">
+            <h2 class="h2">{{ area[1] }}</h2>
+          </div>
+        </div>
+        <div class="face back">
+          <div style="text-align: center;"><h2 style="color: #1ab192;">Informacion</h2></div>
+          <div class="entornos" id="targetOne">
+            <p><i class="fa-solid fa-book-open-reader"></i> {{ area[4] }}</p>
+          </div>
+          <div class="desarrollo" id="targetThree">
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+
+      {% for carreras in carrera %}
+      <div class="cards">
+        <div class="face front">
+          <img src="{{ carreras[4] }}" alt="" />
+          <div class="info">
+            <h2 class="h2">{{ carreras[1] }}</h2>
+          </div>
+        </div>
+        <div class="face back">
+          <div style="text-align: center;"><h2 style="color: #1ab192;">Informacion</h2></div>
+          <div class="entornos" id="targetOne">
+            {% for scarrera in spe %}
+              {% if scarrera[2] == carreras[0] %}
+                <p><i class="fa-solid fa-book-open-reader"></i> {{ scarrera[1] }}</p>
+              {% endif %}
+            {% endfor %}
+            <p><i class="fa-solid fa-building"></i> Edificio: {{ carreras[6] }}</p>
+          </div>
+          <div class="desarrollo" id="targetThree">
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+
+    {% for admins in admin %}
+    <div class="cards">
+      <div class="face front">
+        <img src="https://cdn-icons-png.flaticon.com/512/456/456212.png" alt="" />
+        <div class="info">
+          <h2 class="h2">{{ admins[1] + ' ' + admins[2] }}</h2>
+          <p>{{ admins[8] }}</p>
+        </div>
+      </div>
+      <div class="face back">
+        <div style="text-align: center;"><h2 style="color: #1ab192;">Informacion</h2></div>
+        <div class="entornos" id="targetOne">
+          <p><i class="fa-solid fa-envelope"></i> {{ admins[6] }}</p>
+          <p><i class="fa-solid fa-phone"></i> {{ admins[7] }}</p>
+        </div>
+        <div class="desarrollo" id="targetThree">
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+
+      {% for grados in grado %}
+      <div class="cards">
+        <div class="face front" style="text-align: center;">
+            {% if grados[1] == 'Ingenieria' %}
+            <img class="image" src="https://universidadeuropea.com/resources/media/images/tipos-de-ingenieria-1200x630.original.jpg" alt="" />
+            {% else %}
+            <img class="image" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQqLbqs9EiqVnkJcbXspwfbddz1uZsS2st_pg&usqp=CAU" alt="" />
+            {% endif %}
+          <div class="info">
+            <h2 class="h2">{{ grados[1] }}</h2>
+          </div>
+        </div>
+        <div class="face back">
+          <div style="text-align: center;"><h2 style="color: #1ab192;">Informacion</h2></div>
+          <div class="entornos" id="targetOne">
+            {% for career in carrera%}
+              {% if career[3] == grados[0] %}
+              <p><i class="fa-solid fa-user-tie"></i> {{ career[1] }}</p>
+              {% endif %}
+            {% endfor %}
+          </div>
+          <div class="desarrollo" id="targetThree">
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+
+    
+      <footer class="Myfooter">
+        <p>© <span id="year"></span> Universidad Tecnologica de Tamaulipas Norte.</p>
+      </footer>
+    </main>
+  </div>
+</div>
+
+{% endblock %}

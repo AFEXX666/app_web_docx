@@ -1,0 +1,13 @@
+{
+  "type": "service_account",
+  "project_id": "music-382012",
+  "private_key_id": "91a0397cae79990c6f10487a2ef3af44508cc030",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQCx1N3q8kQWnzrV\npDv+zRYSr7RGv18uZzRwyPqdBQeUHInBmIWiELc4sqm5g/K3Ef8gBTPR13bDkr4A\ncpUFdjrha6Rq/3H4XFWYE2IfNFeLc0bIzk5IB7oxUhj5joJAYh5XvBLXbWlGk2/H\nIdro7zc+KL1hdlN01XAbz1F4E+9zpBNto1UdFKeo8xz7LfvtK/JtziXvoWAMq7bF\nubpRQf1ekofFTF0xBaUBx9BEzc7Lq8z0A/DcB32SLlW6lPDpUm6XCSl9ms+rG11r\nVRYzWjyHktutXK0a3r1gN4xaWnD+9eCRlvA9nVg+aa2gR3ClGuNY3cOM3GNMMZvT\nw+UbPkPdAgMBAAECggEAEzrEO39yjuqte0Qs66bkK+WdjifsBDHLSSXmebu9P84d\nNFbInoeFtIcXVNT4lkTHLIB7g8WzlT7lNlmtlR9dixovd5WDTrq3U8BG1D599/mh\nbh3m96GESAiLZFL9cTZa9xxCglKVt3jCdctKp3UUqW9Q2TzpFeFto8g1lFE9i6jE\nXL06zNhbS1DqFxLZsS3b0oc723FwxFra6buYZNLBLDRgUpF2WN/i7IwOaB66t1Jc\nxA6PQV3h+7aZw29W/wRthqmqPc+h5Qdlo9yKTl9svydGIgWz3TgLxhOKpQR3UmBU\nXhQ6YcM19fupR6GNl3vUZJH1jmsb4OevDZUbIP7h0QKBgQDmQJm7UPy4IcE8XBKy\n0hKcDJEwbG90Q/rMWuAasM4HZPxz3ZVFvZOzGUScO05lurDNhUkJxyyUQCLSOhzF\nm4HICo8dFC0/dRfiMXcnreQAIjE+nfswM3NH2ASnGN7xa4NF4uVLqEJykyVJKRKf\n4NySwh/943p9IcxnuwbltX0T0QKBgQDFt596D1BrTMZy4xNYyFHOzW0+GMXQKBuI\nx95S91DysrycnhNfbvUSihhCtLzIFDhAYH6ecHNwuhZepTHLJc+MGAZiOYOug1Nx\nt1YVEYqa+7WlJB8thl4VpWlaZyoeCdsZ973hmMZCBXtYYXdB0ITw8h8l7UVi//BK\nXch35MPuTQKBgHVEfYd7TdrxxhrZweQ1PakgdWm2MGWEod0mg3DUj3oQosrYFch5\nLxpOSjVPtzP0i0uBEJvcRwYSTCnJ0xGJi+W4Cv+CYTEqj8lx6//XfoHa6D299Equ\nSY5TpLr93b4TRb54OtP3lDAKZTkHpCatPWm5WNXT33SPnC1QgcjIUDWhAoGAQeXQ\nlmsSP6EIJ3R9l0K02XtoZKD3FUi43J7Y/8gER8/Aw2aASHd/4Rz7twfsP7dVhEdl\nDEOohjLPj935OZ8xjJzZS9WliP2mSyly3HTLQJqSUSc36QF2zDokYgguZnKcfwwu\nUkmMEqcnFC7wA5SPKotYTFjHnpZ1LSQS07sAfqUCgYBSIjj9IKBLpROwSnykvedS\n7MgkD9S7Su9xy/UTR7vGoSFxTCoK+HMYPpwbUBhArPqY0ac8egYbieIC2h5Ja4wH\nFNup1ae2t8y9i0Lup+9ZkQZZzigw/hs0ElJlaI2EbyJnthxwsMLBXf8KUiOik3Yr\nc2RE5FbTxUC8TxWdyVIC7g==\n-----END PRIVATE KEY-----\n",
+  "client_email": "planeacion-digital@music-382012.iam.gserviceaccount.com",
+  "client_id": "109273998916561972055",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/planeacion-digital%40music-382012.iam.gserviceaccount.com",
+  "universe_domain": "googleapis.com"
+}

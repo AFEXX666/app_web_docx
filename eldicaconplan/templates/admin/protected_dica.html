@@ -1,0 +1,41 @@
+{% extends './base.html' %} {% block title %}Home{% endblock %} {% block
+customCSS %}
+<style>
+  body {
+    background-color: #f1f1f1;
+    font-family: Arial, sans-serif;
+    text-align: center;
+    padding-top: 100px;
+  }
+
+  h1 {
+    color: #333;
+    font-size: 36px;
+  }
+
+  p {
+    color: #666;
+    font-size: 18px;
+  }
+
+  .btn {
+    background-color: #4caf50;
+    color: white;
+    padding: 10px 20px;
+    font-size: 16px;
+    border: none;
+    cursor: pointer;
+    margin-top: 20px;
+  }
+</style>
+{% endblock %} {% block body %}
+<h1>Antes de tener acceso al dica debes rellenar la planeacion</h1>
+<button class="btn" onclick="goBack()">Volver</button>
+<a class="btn" href="{{ url_for('planeacionesU') }}">Rellenarla</a>
+
+<script>
+  function goBack() {
+    window.history.go(-1);
+  }
+</script>
+{% endblock %}

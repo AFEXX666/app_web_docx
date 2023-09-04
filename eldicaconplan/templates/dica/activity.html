@@ -1,0 +1,648 @@
+{% extends './base.html' %} {% block title %}Actividades{% endblock %} {% block
+  customCSS %}
+  <link
+    rel="stylesheet"
+    href="{{ url_for('static', filename='css/style.css') }}"
+  />
+  <link
+  rel="stylesheet"
+  href="{{ url_for('static', filename='css/home.css') }}"
+/>
+  {% endblock %} {% block body %}
+  <!--nombre de la actividad ra o examen
+  <div class="popup-container" id="formato">
+    <form action="/config" method="post">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+      <input type="hidden" name="idS" value="{{ current_user.id }}" id="idS" />
+      <input type="hidden" name="idG" value="{{ student[0][9] }}" id="idG" />
+      <input type="hidden" name="idM" value="{{ student[0][9] }}" id="idG" />
+      <div class="popup-content">
+        <div class="head">
+          <h2>Configuracion</h2>
+        </div>
+        <div class="activityP">
+          <div class="firstP">
+            <p>Numero de Actividades de aprendizaje</p>
+          </div>
+          <div class="twoP">
+            <p><input required="" type="text" name="txtactividad" id="" /></p>
+          </div>
+        </div>
+        <div class="activityP">
+          <div class="firstP">
+            <p>Numero de Resultados de aprendizaje</p>
+          </div>
+          <div class="twoP">
+            <p><input required="" type="text" name="txtra" id="" /></p>
+          </div>
+        </div>
+        <div class="activityP">
+          <div class="firstP">
+            <p>Calificacion Maxima de Revaloracion</p>
+          </div>
+          <div class="twoP">
+            <p><input required="" type="text" name="txtreva" id="" /></p>
+          </div>
+        </div>
+        <div class="activityP">
+          <div class="firstP">
+            <p>Numero de Unidades</p>
+          </div>
+          <div class="twoP">
+            <p><input required="" type="text" name="txtunidad" id="" /></p>
+          </div>
+        </div>
+        <div class="activityP">
+          <div class="firstP">
+            <p>Materia de Integradora</p>
+          </div>
+          <div class="twoP">
+            <p><input required="" type="text" name="txtintegra" id="" pattern="[si/no]"/></p>
+          </div>
+        </div>
+        <div class="footers">
+          <button id="close">Cancelar</button>
+          <button class="guardar" name="action" value="add">Guardar</button>
+        </div>
+    </form>
+  </div>
+</div>-->
+  <header style="height: 169px !important;">
+    <div class="linea-verde"></div>
+    <div class="contenedor-imagen">
+      <img src="../static/img/logouttn.png" alt="Imagen" />
+    </div>
+    <ul class="navbar-nav ml-auto ml-md-0" style="position: absolute; right: .5cm;">
+      <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" id="userDropdown" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="color: #fff;"><i class="fas fa-user fa-fw"></i></a>
+          <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
+              <a class="dropdown-item" href="#"></a><a class="dropdown-item" href="#">{{ current_user.fullname }}</a>
+              <div class="dropdown-divider"></div>
+              <a class="dropdown-item" href="#"></a><a class="dropdown-item" href="#">{{ current_user.user_type }}</a>
+              <div class="dropdown-divider"></div>
+              <a class="dropdown-item" href="{{ url_for('inicio_dica') }}">volver al inicio</a>
+              <div class="dropdown-divider"></div>
+              <a class="dropdown-item" href="{{ url_for('logout') }}">Log Out</a>
+          </div>
+      </li>
+  </ul>
+  </header>
+
+  <div class="act">
+    <div class="sidebar">
+      <div class="unit">
+        <div>Grupo</div>
+        <div>{{ student[0][6]|string + ' ' + student[0][7]|string + ' ' + student[0][8]|string }}</div>
+        <div class="ico"><i class="fa-solid fa-gear"></i></div>
+      </div>
+      {% if uni == 'promedio' %}
+      <a href="{{ url_for('unidad', uni='promedio') }}"><div class="unit selected">Promedio</div></a>
+      {% else %}
+      <a href="{{ url_for('unidad', uni='promedio') }}"><div class="unit">Promedio</div></a>
+      {% endif %}
+      {% for act in range(1, conte + 1) %}
+        {% if uni|int == act|int %}
+          <a href="{{ url_for('unidad', uni=act) }}"><div class="unit selected">{{ 'Unidad' + ' ' + act|string }}</div></a>
+        {% else %}
+          <a href="{{ url_for('unidad', uni=act) }}"><div class="unit">{{ 'Unidad' + ' ' + act|string }}</div></a>
+        {% endif %}
+      {% endfor %}
+    </div>
+
+    <div class="tables">
+      {% if uni != 'promedio' %}
+      <div class="header">
+        <div class="ref">
+          <p class="units selecteds" id="select" onclick="selectUnit(this, 'change')">Actividades</p>
+          <p class="units" id="select2" onclick="selectUnit(this, 'change2')">Resultado de aprendizaje</p>
+          <p class="units" id="select3" onclick="selectUnit(this, 'change3')">Examen</p>
+          <p class="units" id="select4" onclick="selectUnit(this, 'change4')">Ser</p>
+          <i></i>
+        </div>
+      </div>
+      
+      <form action="/guardar" class="hidden" id="change" method="post">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+        <div style="height: 387px; overflow: auto;">
+          <div class="activity"><!-- actividades-->
+            <div class="first">
+              <div style="width: 100%;">
+                <p>Matricula</p>
+              </div>
+              <div style="width: 100%;">
+                <p>Alumno</p>
+              </div>
+  
+            </div>
+            <div class="two">
+                {% for act in range(1, formatted_lists[3] + 1) %}
+                <p>{{ 'Act' + act|string }}</p>
+                {% endfor %}
+              <p>Calif.</p>
+            </div>
+          </div>
+          {% set st = 0 %}
+        {% for students in student %}
+          <div class="activity">
+            <div class="first">
+              <div style="width: 100%;">
+                <p>{{ students[4] }}</p>
+              </div>
+              <div style="width: 100%;">
+                <p>{{ students[1] + ' ' + students[2] + ' ' + students[3] }}</p>
+              </div>
+              
+            </div>
+            <div class="two">
+              {% for act in range(1, formatted_lists[3] + 1) %}
+              <p><input type="text" name="txtcal_{{ students[0] }}_{{ act }}" value="{{ students[10][act] }}"/></p>
+              {% endfor %}
+              <p><input type="text" disabled value="{{ students[11] }}" /></p>
+            </div>
+            <input type="hidden" name="student_id[]" value="{{ students[0] }}">
+          </div>
+          {% endfor %}
+          </div>
+      <button type="submit" style="margin-top: 15px;margin-bottom: 15px;">Guardar</button>
+
+      </form>
+
+
+      <form action="/guardar" class="hidden" id="change2" method="post">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+      <div style="height: 387px; overflow: auto;">
+      <div class="activity"><!-- RA-->
+          <div class="first">
+            <div style="width: 100%;">
+              <p>Matricula</p>
+            </div>
+            <div style="width: 100%;">
+              <p>Alumno</p>
+            </div>
+
+          </div>
+          <div class="two">
+              {% for act in range(1, formatted_lists[0] + 1) %}
+              <p>{{ 'RA-' + act|string }}</p>
+              {% endfor %}
+            <p>Calif.</p>
+          </div>
+        </div>
+
+        {% for students in stude %}
+        <div class="activity">
+          
+          <div class="first">
+            <div style="width: 100%;">
+              <p>{{ students[4] }}</p>
+            </div>
+            <div style="width: 100%;">
+              <p>{{ students[1] + ' ' + students[2] + ' ' + students[3] }}</p>
+            </div>
+            
+          </div>
+
+          <div class="two">
+              {% for act in range(1, formatted_lists[0] + 1) %}
+              <p><input type="text" name="txtcal_{{ students[0] }}_{{ act }}" value="{{ students[10][act] }}"/></p>
+              {% endfor %}
+            <p><input type="text" disabled value="{{ students[11] }}"/></p>
+            <input type="hidden" name="student_id[]" value="{{ students[0] }}">
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+      <button type="submit" style="margin-top: 15px;margin-bottom: 15px;">Guardar</button>
+
+    </form>
+
+
+    <form action="/guardar" class="hidden" id="change3" method="post">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+      <div style="height: 387px; overflow: auto;">
+      <div class="activity"><!--EXAM-->
+          <div class="first">
+            <div style="width: 100%;">
+              <p>Matricula</p>
+            </div>
+            <div style="width: 100%;">
+              <p>Alumno</p>
+            </div>
+
+          </div>
+          <div class="two">
+            <p>Examen</p>
+           
+          </div>
+        </div>
+
+        {% for students in stue %}
+        <div class="activity">
+          
+          <div class="first">
+            <div style="width: 100%;">
+              <p>{{ students[4] }}</p>
+            </div>
+            <div style="width: 100%;">
+              <p>{{ students[1] + ' ' + students[2] + ' ' + students[3] }}</p>
+            </div>
+            
+          </div>
+
+          <div class="two">
+            {% for act in range(1, formatted_lists[1] + 1) %}
+            <p><input type="text" name="txtcal_{{ students[0] }}_{{ act }}" value="{{ students[10][act] }}"/></p>
+            {% endfor %}
+          </div>
+          <input type="hidden" name="student_id[]" value="{{ students[0] }}">
+        </div>
+        {% endfor %}
+      </div>
+      <button type="submit" style="margin-top: 15px;margin-bottom: 15px;">Guardar</button>
+    </form>
+
+    
+    <form action="/guardar" class="hidden" id="change4" method="post">
+       <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+      <div style="height: 387px; overflow: auto;">
+      <div class="activity"><!--SER-->
+          <div class="first">
+            <div style="width: 100%;">
+              <p>Matricula</p>
+            </div>
+            <div style="width: 100%;">
+              <p>Alumno</p>
+            </div>
+
+          </div>
+          <div class="two">
+            <p>RES</p>
+            <p>T-e-E</p>
+            <p>O y L</p>
+            <p>C-E</p>
+            <p>Calif.</p>
+          </div>
+        </div>
+
+        {% for students in stu %}
+        <div class="activity">
+          
+          <div class="first">
+            <div style="width: 100%;">
+              <p>{{ students[4] }}</p>
+            </div>
+            <div style="width: 100%;">
+              <p>{{ students[1] + ' ' + students[2] + ' ' + students[3] }}</p>
+            </div>
+            
+          </div>
+
+          <div class="two">
+            {% for act in range(1, 4 + 1) %}
+            <p><input type="text" name="txtcal_{{ students[0] }}_{{ act }}" value="{{ students[10][act] }}"/></p>
+            {% endfor %}
+              <p><input type="text" disabled id="" value="{{ students[11] }}"/></p>
+          </div>
+        </div>
+        {% endfor %}
+    </div>
+    <button type="submit" style="margin-top: 15px;margin-bottom: 15px;">Guardar</button>
+  </form>
+
+  {% else %}
+  
+    <div style="height: 387px; overflow: auto;">
+    <div class="activity"><!--SER-->
+        <div class="first">
+          <div style="width: 100%;">
+            <p>Matricula</p>
+          </div>
+          <div style="width: 100%;">
+            <p>Alumno</p>
+          </div>
+
+        </div>
+        <div class="two">
+          {% for act in range(1, conte + 1) %}
+          <p>{{ 'Unidad' + ' ' + act|string }}</p>
+          {% endfor %}
+          <p>Calif.</p>
+        </div>
+      </div>
+
+      {% for unidad in final_data %}
+      <div class="activity">
+        
+        <div class="first">
+          <div style="width: 100%;">
+            <p>{{ unidad[4] }}</p>
+          </div>
+          <div style="width: 100%;">
+            <p>{{ unidad[1] + ' ' + unidad[2] + ' ' + unidad[3] }}</p>
+          </div>
+          
+        </div>
+
+        <div class="two">
+          {% for act in range(0, conte) %}
+            <p><input type="text" name="txres" id="" disabled value="{{ unidad[12][act] }}"/></p>
+          {% endfor %}
+            <p><input type="text" name="txres" id="" disabled value="{{unidad[15] }}"/></p>
+        </div>
+      </div>
+      {% endfor %}
+  </div>
+  {% endif %}
+    </div>
+  </div>
+  <footer class="Myfooter">
+    <p>
+      © <span id="year"></span> Universidad Tecnologica de Tamaulipas Norte.
+    </p>
+  </footer>
+
+
+  <script>
+    function selectUnit(unitElement, divId) {
+      var units = document.querySelectorAll(".units");
+      units.forEach(function(unit) {
+        unit.classList.remove("selecteds");
+      });
+
+      var divs = document.querySelectorAll(".hidden");
+      divs.forEach(function(div) {
+        div.style.display = "none";
+      });
+
+      unitElement.classList.add("selecteds");
+      document.getElementById(divId).style.display = "block";
+    }
+
+    
+    window.onload = function() {
+      selectUnit(document.getElementById("select"), 'change');
+    };
+  </script>
+<script>
+  function selectUnit(unitElement, divId) {
+    var units = document.querySelectorAll(".units");
+    units.forEach(function(unit) {
+      unit.classList.remove("selecteds");
+    });
+
+    var divs = document.querySelectorAll(".hidden");
+    divs.forEach(function(div) {
+      div.style.display = "none";
+    });
+
+    unitElement.classList.add("selecteds");
+    document.getElementById(divId).style.display = "block";
+  }
+
+  
+  window.onload = function() {
+    selectUnit(document.getElementById("select"), 'change');
+  };
+
+  
+  var unitElements = document.querySelectorAll(".unit");
+  unitElements.forEach(function(unitElement) {
+    unitElement.addEventListener("click", function() {
+      var divId = unitElement.getAttribute("data-target");
+      selectUnit(unitElement, divId);
+    });
+
+    unitElement.addEventListener("keydown", function(event) {
+      if (event.key === "Enter") {
+        var divId = unitElement.getAttribute("data-target");
+        selectUnit(unitElement, divId);
+      }
+    });
+  });
+</script>
+
+  <script>
+    let open = document.querySelector("#create");
+    let close = document.querySelector("#close");
+    let modal = document.querySelector("#formato");
+    let change1 = document.querySelector("#change");
+    let change2 = document.querySelector("#change2");
+    let change3 = document.querySelector("#change3");
+    let change4 = document.querySelector("#change4");
+    let select1 = document.querySelector("#select");
+    let select2 = document.querySelector("#select2");
+    let select3 = document.querySelector("#select3");
+    let select4 = document.querySelector("#select4");
+
+    open.addEventListener("click", () => {
+      modal.style.display = "flex";
+    });
+
+    select2.addEventListener("click", ()=> {
+      const el = document.querySelector("#guardar");
+      el.value = "Resultado de aprendizaje";
+    })
+
+    close.addEventListener("click", () => {
+      modal.style.display = "none";
+    });
+
+    close.addEventListener("click", () => {
+      modal.style.display = "none";
+    });
+  </script>
+  <script>
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.getElementById('change');
+    form.addEventListener('submit', function(event) { 
+
+        const formData = new FormData(form); 
+        formData.append('tipo', "Actividad");
+        
+        fetch('/guardar', {
+            method: 'POST',
+            body: formData
+        })
+        window.location.reload()
+        .then(response => response.json())
+        .then(data => {
+            console.log('Respuesta del servidor:', data);  
+            
+            if (data.message === 'Datos recibidos correctamente') {
+                
+                window.location.reload();
+            } else {
+                console.error('Hubo un error al guardar los datos');
+            }
+        })
+        .catch(error => {
+            console.error('Error en la solicitud:', error);
+        });
+    });
+});
+
+
+    </script>
+    
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+          const form = document.getElementById('change2');
+          form.addEventListener('submit', function(event) { 
+      
+              const formData = new FormData(form); 
+              formData.append('tipo', "RA");
+              
+              fetch('/guardar', {
+                  method: 'POST',
+                  body: formData
+              })
+              window.location.reload()
+              .then(response => response.json())
+              .then(data => {
+                  console.log('Respuesta del servidor:', data);  
+                  
+                  if (data.message === 'Datos recibidos correctamente') {
+                      
+                      window.location.reload();
+                  } else {
+                      console.error('Hubo un error al guardar los datos');
+                  }
+              })
+              .catch(error => {
+                  console.error('Error en la solicitud:', error);
+              });
+          });
+      });
+      
+          </script>
+          
+          <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                const form = document.getElementById('change2');
+                form.addEventListener('submit', function(event) { 
+            
+                    const formData = new FormData(form); 
+                    formData.append('tipo', "Examen");
+                    
+                    fetch('/guardar', {
+                        method: 'POST',
+                        body: formData
+                    })
+                    window.location.reload()
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log('Respuesta del servidor:', data);  
+                        
+                        if (data.message === 'Datos recibidos correctamente') {
+                            
+                            window.location.reload();
+                        } else {
+                            console.error('Hubo un error al guardar los datos');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error en la solicitud:', error);
+                    });
+                });
+            });
+            
+                </script>
+
+          <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                const form = document.getElementById('change3');
+                form.addEventListener('submit', function(event) {
+            
+                    const formData = new FormData(form); 
+                    formData.append('tipo', "Examen");
+                    
+                    fetch('/guardar', {
+                        method: 'POST',
+                        body: formData
+                    })
+                    window.location.reload()
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log('Respuesta del servidor:', data);  
+                        
+                        if (data.message === 'Datos recibidos correctamente') {
+                            
+                            window.location.reload();
+                        } else {
+                            console.error('Hubo un error al guardar los datos');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error en la solicitud:', error);
+                    });
+                });
+            });
+            
+                </script>
+                  <script>
+                    document.addEventListener('DOMContentLoaded', function() {
+                        const form = document.getElementById('change4');
+                        form.addEventListener('submit', function(event) { 
+                    
+                            const formData = new FormData(form); 
+                            formData.append('tipo', "Ser");
+                            
+                            fetch('/guardar', {
+                                method: 'POST',
+                                body: formData
+                            })
+                            window.location.reload()
+                            .then(response => response.json())
+                            .then(data => {
+                                console.log('Respuesta del servidor:', data);  
+                                
+                                if (data.message === 'Datos recibidos correctamente') {
+                                    
+                                    window.location.reload();
+                                } else {
+                                    console.error('Hubo un error al guardar los datos');
+                                }
+                            })
+                            .catch(error => {
+                                console.error('Error en la solicitud:', error);
+                            });
+                        });
+                    });
+                    
+                        </script>
+                
+                <script>
+                  document.addEventListener('DOMContentLoaded', function() {
+                      const textInputs = document.querySelectorAll('input[type="text"]');
+                      
+                      textInputs.forEach(input => {
+                          const value = input.value.trim();
+                          
+                          if (value !== '' && (!/^\d+$/.test(value) || parseInt(value) > 10)) {
+                              input.value = value.slice(0, -1);
+                          }
+                          
+                          if (value !== '' && parseInt(value) <= 7) {
+                              input.style.color = 'red';  
+                          }
+                          
+                          input.addEventListener('input', function() {
+                              const newValue = this.value.trim();
+                              
+                              if (newValue !== '' && (!/^\d+$/.test(newValue) || parseInt(newValue) > 10)) {
+                                  this.value = newValue.slice(0, -1);
+                              }
+                              
+                              if (newValue !== '' && parseInt(newValue) <= 7) {
+                                  this.style.color = 'red';  
+                              } else {
+                                  this.style.color = '';  
+                              }
+                          });
+                      });
+                  });
+              </script>
+              
+              
+            
+  {% endblock %}

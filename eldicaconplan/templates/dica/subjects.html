@@ -1,0 +1,77 @@
+{% extends './base.html' %} {% block title %}Materias{% endblock %} {% block
+  customCSS %}
+  <link
+    rel="stylesheet"
+    href="{{ url_for('static', filename='css/home.css') }}"
+  />
+  {% endblock %} {% block body %}
+  <header>
+    <div class="linea-verde"></div>
+    <div class="contenedor-imagen">
+      <img src="../static/img/logouttn.png" alt="Imagen" />
+    </div>
+    <ul class="navbar-nav ml-auto ml-md-0" style="position: absolute; right: .5cm;">
+      <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" id="userDropdown" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="color: #fff;"><i class="fas fa-user fa-fw"></i></a>
+          <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
+              <a class="dropdown-item" href="#"></a><a class="dropdown-item" href="#">{{ current_user.fullname }}</a>
+              <div class="dropdown-divider"></div>
+              <a class="dropdown-item" href="#"></a><a class="dropdown-item" href="#">{{ current_user.user_type }}</a>
+              <div class="dropdown-divider"></div>
+              <a class="dropdown-item" href="{{ url_for('inicio_dica') }}">Volver al inicio</a>
+              <div class="dropdown-divider"></div>
+              <a class="dropdown-item" href="{{ url_for('logout') }}">Log Out</a>
+          </div>
+      </li>
+  </ul>
+  </header>
+  <main class="mycards" style="flex-wrap: wrap; align-items: start !important;">
+  {% for mate in materia %}
+  
+  <a href="{{ url_for('gru', mate=mate[7], id=mate[0], unidad=1) }}">
+    <div class="cardes">
+      <div class="face front">
+        <img src="{{ mate[2] }}" alt="" />
+        <div class="info" style="display: block !important;">
+          <h2 style="font-size: 1.5rem;">{{ mate[1] }}</h2>
+          <p>{{ mate[6]|string + ' ' + mate[5] }}</p>
+        </div>
+      </div>
+      <div class="face back">
+      </div>
+    </div>
+  </a>
+  {% endfor %}
+  </main>
+  <footer style="position: fixed !important;">
+    <p>© <span id="year"></span> Universidad Tecnologica de Tamaulipas Norte.</p>
+  </footer>
+  <!--PARTE DEL ADIMN-->
+  <script>
+    var tsu = document.querySelector("#targetOne");
+    var ing = document.querySelector("#targetThree");
+  
+    tsu.addEventListener("click", () => {
+      window.location = "home_user";
+    });
+    ing.addEventListener("click", () => {
+      window.location = "home_user";
+    });
+  </script>
+  <!--PARTE DEL MAESTRO-->
+  <script>
+    var tsu = document.querySelector("#adminTagone");
+    var ing = document.querySelector("#adminTagonethree");
+  
+    tsu.addEventListener("click", () => {
+      window.location = "home_admin";
+    });
+    ing.addEventListener("click", () => {
+      window.location = "home_admin";
+    });
+  </script>
+  
+  
+  
+  {% endblock %}
+  
